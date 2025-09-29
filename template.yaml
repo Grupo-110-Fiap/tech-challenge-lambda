@@ -1,0 +1,11 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  TechChallengeLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: br.com.fiap.techchallenge.lambda.LambdaHandler::handleRequest
+      Runtime: java21
+      CodeUri: build/libs/lambda-tech-challenge.jar
+      MemorySize: 512
+      Timeout: 15

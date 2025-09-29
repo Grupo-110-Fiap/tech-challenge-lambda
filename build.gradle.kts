@@ -4,22 +4,21 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-group = "br.com.fiap.techchallenge"
-version = "1.0-SNAPSHOT"
+group = "br.com.fiap.techchallenge.lambda"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
     implementation("com.amazonaws:aws-lambda-java-core:1.2.2")
     implementation("com.amazonaws:aws-lambda-java-events:3.11.0")
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("software.amazon.awssdk:cognitoidentityprovider:2.20.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
+
 
     testImplementation(kotlin("test"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
+    testImplementation("io.mockk:mockk:1.14.5")
 }
 
 kotlin {
@@ -35,7 +34,7 @@ tasks.test {
 }
 
 tasks.shadowJar {
-    archiveBaseName.set("tech-challenge-lambda") // Nome do arquivo JAR de saída
-    archiveClassifier.set("") // Remove o classificador padrão para ter um nome limpo
+    archiveBaseName.set("lambda-tech-challenge") // Nome do arquivo JAR de saída
+    archiveClassifier.set("")
     archiveVersion.set("")
 }
