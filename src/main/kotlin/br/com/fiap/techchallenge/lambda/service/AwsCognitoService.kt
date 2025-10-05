@@ -7,7 +7,6 @@ import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminInitia
 import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminSetUserPasswordRequest
 import software.amazon.awssdk.services.cognitoidentityprovider.model.AttributeType
 import software.amazon.awssdk.services.cognitoidentityprovider.model.AuthFlowType
-import software.amazon.awssdk.services.cognitoidentityprovider.model.ListUsersRequest
 import software.amazon.awssdk.services.cognitoidentityprovider.model.MessageActionType
 import software.amazon.awssdk.services.cognitoidentityprovider.model.NotAuthorizedException
 import software.amazon.awssdk.services.cognitoidentityprovider.model.UserNotFoundException
@@ -23,33 +22,14 @@ open class AwsCognitoService(
     }
 
     fun getUserAndToken(request: Request): String {
-        val email = findByCPF(request.cpf!!)
-        return authenticateExistingUser(request.cpf)
+        return authenticateExistingUser(request.cpf!!)
     }
 
     fun getAnonUser(): String {
-        val email = cognitoSecrets.anonymousEmail
-            ?: throw IllegalStateException("Anonymous email not configured")
+        val username = cognitoSecrets.anonymousUsername
+            ?: throw IllegalStateException("Anonymous username not configured")
 
-        return authenticateExistingUser(email)
-    }
-
-    fun findByCPF(cpf: String): String {
-        require(cpf.isNotBlank()) { "CPF cannot be empty" }
-
-        val users = cognito.listUsers(
-            ListUsersRequest.builder()
-                .userPoolId(cognitoSecrets.userPoolId)
-                .filter("custom:cpf = \"$cpf\"")
-                .limit(1)
-                .build()
-        )
-
-        if (users.users().isEmpty()) {
-            throw IllegalArgumentException("CPF $cpf not found in Cognito")
-        }
-
-        return users.users().first().attributes().first { it.name() == "email" }.value()
+        return authenticateExistingUser(username)
     }
 
     fun createUserWithCpf(request: Request) {
@@ -85,7 +65,7 @@ open class AwsCognitoService(
         }
     }
 
-    fun authenticateExistingUser(cpf: String): String {
+    fun authenticateExistingUser(username: String): String {
         return try {
             val authRequest = AdminInitiateAuthRequest.builder()
                 .userPoolId(cognitoSecrets.userPoolId)
@@ -93,13 +73,12 @@ open class AwsCognitoService(
                 .authFlow(AuthFlowType.ADMIN_USER_PASSWORD_AUTH)
                 .authParameters(
                     mapOf(
-                        "USERNAME" to cpf,
+                        "USERNAME" to username,
                         "PASSWORD" to cognitoSecrets.password
                     )
                 )
                 .build()
 
-            println(authRequest)
             val response = cognito.adminInitiateAuth(authRequest)
             response.authenticationResult().idToken()
         } catch (e: UserNotFoundException) {

@@ -11,7 +11,7 @@ data class CognitoSecrets(
     val clientId: String = "",
     val userPoolId: String = "",
     val password: String = "",
-    val anonymousEmail: String? = ""
+    val anonymousUsername: String? = ""
 )
 
 class CognitoSecretsProvider {
@@ -44,7 +44,7 @@ class CognitoSecretsProvider {
             clientId = "mock-client-id",
             userPoolId = "mock-user-pool-id",
             password = "mock-password",
-            anonymousEmail = "anonimo@tehchchallenge.com"
+            anonymousUsername = "111.111.111-11"
         )
         else -> null
     }
