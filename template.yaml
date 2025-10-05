@@ -1,6 +1,25 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Resources:
+  TechChallengeApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: tech-challenge-gateway
+      StageName: Prod
+      Cors:
+        AllowMethods: "'POST,GET,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"
+  TechChallengePoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref MeuUserPool
+      ClientName: meu-app-backend
+      GenerateSecret: true
+      ExplicitAuthFlows:
+        - ADMIN_USER_PASSWORD_AUTH
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
   TechChallengeLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -8,4 +27,17 @@ Resources:
       Runtime: java21
       CodeUri: build/libs/lambda-tech-challenge.jar
       MemorySize: 512
-      Timeout: 15
+      Timeout: 30
+      Events:
+        LoginApi:
+          Type: Api
+          Properties:
+            Path: /login
+            Method: post
+            RestApiId: !Ref TechChallengeApiGateway
+        RegisterApi:
+          Type: Api
+          Properties:
+            Path: /register
+            Method: post
+            RestApiId: !Ref TechChallengeApiGateway

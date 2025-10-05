@@ -1,0 +1,22 @@
+{
+  "version": "2.0",
+  "routeKey": "POST /login",
+  "rawPath": "/login",
+  "rawQueryString": "",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "requestContext": {
+    "http": {
+      "method": "POST",
+      "path": "/login",
+      "protocol": "HTTP/1.1",
+      "sourceIp": "127.0.0.1",
+      "userAgent": "PostmanRuntime/7.32.2"
+    },
+    "routeKey": "POST /login",
+    "stage": "$default"
+  },
+  "body": "{\"cpf\":\"830.502.900-05\"}",
+  "isBase64Encoded": false
+}

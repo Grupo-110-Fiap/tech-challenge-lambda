@@ -25,22 +25,68 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution_policy" {
 }
 
 resource "aws_lambda_function" "lambda_tech_challenge" {
-  function_name    = "${var.project_name}-kotlin-lambda"
+  function_name    = "${var.project_name}-lambda"
   handler          = var.lambda_handler_name
   runtime          = var.lambda_runtime
   role             = aws_iam_role.lambda_exec_role.arn
   s3_bucket        = var.lambda_s3_bucket_name
   s3_key           = var.lambda_s3_key
-  source_code_hash = filebase64sha256("${path.module}/../build/libs/tech-challenge-lambda.jar")
+  source_code_hash = filebase64sha256("${path.module}/../build/libs/lambda-tech-challenge.jar")
 
   environment {
     variables = {
       REGION = var.aws_region
+      COGNITO_SECRET_NAME = var.cognito_secret_name
     }
   }
 
   tags = {
     Project = var.project_name
-    Environment = "Development"
   }
+}
+
+resource "aws_iam_policy" "lambda_secrets_policy" {
+  name        = "${var.project_name}-lambda-secrets-policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ],
+        Resource = "arn:aws:secretsmanager:us-east-1:499243079593:secret:tech-challenge/cognito/config-56bcIh*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_attach_secrets" {
+  role       = aws_iam_role.lambda_exec_role.name
+  policy_arn = aws_iam_policy.lambda_secrets_policy.arn
+}
+
+resource "aws_iam_policy" "lambda_cognito_policy" {
+  name = "${var.project_name}-lambda-cognito-policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "cognito-idp:AdminGetUser",
+          "cognito-idp:AdminCreateUser",
+          "cognito-idp:AdminUpdateUserAttributes"
+        ],
+        Resource = "arn:aws:cognito-idp:us-east-1:499243079593:userpool/us-east-1_yo92WsG3Y"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_attach_cognito" {
+  role       = aws_iam_role.lambda_exec_role.name
+  policy_arn = aws_iam_policy.lambda_cognito_policy.arn
 }

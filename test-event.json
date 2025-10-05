@@ -1,0 +1,9 @@
+{
+  "path": "/login",
+  "httpMethod": "POST",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"cpf\":\"12345678901\",\"email\":\"teste@example.com\"}",
+  "isBase64Encoded": false
+}

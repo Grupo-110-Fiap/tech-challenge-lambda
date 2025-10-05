@@ -24,11 +24,16 @@ variable "lambda_s3_key" {
 variable "lambda_handler_name" {
   description = "Nome do handler da função Lambda"
   type        = string
-    default     = "br.com.fiap.techchallenge.lambda.LambdaHandler::handleRequest"
+  default     = "br.com.fiap.techchallenge.lambda.LambdaHandler::handleRequest"
 }
 
 variable "lambda_runtime" {
   description = "Runtime da função Lambda"
   type        = string
   default     = "java21"
+}
+
+variable "cognito_secret_name" {
+  type    = string
+  default = "tech-challenge/cognito/config"
 }
