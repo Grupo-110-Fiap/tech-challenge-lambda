@@ -16,7 +16,7 @@ variable "project_name" {
   default     = "tech-challenge"
 }
 
-variable "lambda_s3_bucket_name" {
+variable "lambda_s3_bucket" {
   description = "Nome do bucket S3 onde o pacote da Lambda será armazenado"
   type        = string
   default     = "grupo-125-tech-challenge-lambda"

@@ -29,9 +29,8 @@ resource "aws_lambda_function" "lambda_tech_challenge" {
   handler          = var.lambda_handler_name
   runtime          = var.lambda_runtime
   role             = aws_iam_role.lambda_exec_role.arn
-  s3_bucket        = var.lambda_s3_bucket_name
+  s3_bucket        = var.lambda_s3_bucket
   s3_key           = var.lambda_s3_key
-  source_code_hash = filebase64sha256("${path.module}/../build/libs/lambda-tech-challenge.jar")
 
   environment {
     variables = {
