@@ -4,6 +4,12 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "github_owner" {
+  description = "Nome do proprietário da organização ou usuário do GitHub"
+  type        = string
+  default     = "Grupo-110-Fiap"
+}
+
 variable "project_name" {
   description = "Nome do projeto para tagging e prefixos de recursos"
   type        = string
