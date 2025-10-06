@@ -44,7 +44,7 @@ class CognitoSecretsProvider {
             clientId = "mock-client-id",
             userPoolId = "mock-user-pool-id",
             password = "mock-password",
-            anonymousUsername = "111.111.111-11"
+            anonymousUsername = "111.111.111-12"
         )
         else -> null
     }
