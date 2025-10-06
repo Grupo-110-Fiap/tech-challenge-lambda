@@ -1,12 +1,3 @@
-terraform {
-  required_providers {
-    github = {
-      source  = "integrations/github"
-      version = "6.4.0"
-    }
-  }
-}
-
 resource "github_branch_protection" "main_branch_protection" {
   repository_id = "tech-challenge-lambda"
   pattern       = "main"
