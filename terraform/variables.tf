@@ -25,6 +25,7 @@ variable "lambda_s3_bucket" {
 variable "lambda_s3_key" {
   description = "Chave do objeto do pacote da Lambda no S3"
   type        = string
+  default     = "lambda-tech-challenge.jar"
 }
 
 variable "lambda_handler_name" {
