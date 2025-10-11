@@ -79,6 +79,7 @@ open class AwsCognitoService(
                 )
                 .build()
 
+
             val response = cognito.adminInitiateAuth(authRequest)
             response.authenticationResult().idToken()
         } catch (e: UserNotFoundException) {
