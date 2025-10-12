@@ -100,8 +100,9 @@ jobs:
           workspace: ${{ env.TF_WORKSPACE }}
           configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
         env:
-          TF_VAR_lambda_s3_bucket: ${{ env.S3_BUCKET }}
-          TF_VAR_lambda_s3_key: ${{ needs.upload-to-s3.outputs.s3-key }}
+          # Wrap values in quotes so Terraform Cloud writes string literals into terraform.tfvars
+          TF_VAR_lambda_s3_bucket: '"${{ env.S3_BUCKET }}"'
+          TF_VAR_lambda_s3_key: '"${{ needs.upload-to-s3.outputs.s3-key }}"'
 
       - name: Apply
         uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.0.0
